@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#121212" />
+    <link rel="icon" href="https://songpt-ai.web.app/favicon.ico" />
+
+    <!-- Primary Meta Tags -->
+    <title>songpt - Create Spotify Playlists using AI</title>
+    <meta name="title" content="songpt - Create Spotify playlists using AI">
+    <meta name="description" content="songpt creates Spotify playlists based on any text input you provide, using GPT.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://songpt-ai.web.app/">
+    <meta property="og:title" content="songpt - Create Spotify playlists using AI">
+    <meta property="og:description" content="songpt creates Spotify playlists based on any text input you provide, using GPT.">
+    <meta property="og:image" content="https://songpt-ai.web.app/logo512.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://songpt-ai.web.app/">
+    <meta property="twitter:title" content="songpt - Create Spotify playlists using AI">
+    <meta property="twitter:description" content="songpt creates Spotify playlists based on any text input you provide, using GPT.">
+    <meta property="twitter:image" content="https://songpt-ai.web.app/logo512.png">
+
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  </head>
+  <body>
+    <style type="text/css" media="screen">
+      body {
+        margin: 1rem;
+        background-color: #121212;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 95vh;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 900;
+        font-size: 1rem;
+        color: white;
+        text-align: center;
+        gap: 3rem;
+      }
+
+      .main-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .header-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .header {
+        font-size: 2rem;
+      }
+
+      .input-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .songpt-input {
+        background-color: #242424;
+        border: 1px solid transparent;
+        color: white;
+        border-radius: 2rem;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        outline: none;
+        width: 70%;
+        max-width: 30rem;
+      }
+
+      .songpt-input:hover {
+        border: 1px solid gray;
+      }
+
+      .songpt-input:active {
+        border: 1px solid white;
+      }
+
+      .songpt-input:disabled {
+        background-color: #FFFFFF33;
+      }
+
+      .songpt-button {
+        background-color: #1db954;
+        color: #121212;
+        border: none;
+        border-radius: 2rem;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .songpt-button:hover {
+        background-color: #1ed760;
+        transform: scale(1.01);
+      }
+
+      .songpt-button:active {
+        background-color: #1aa34a;
+      }
+
+      .songpt-button:disabled {
+        background-color: gray;
+      }
+
+      .footer-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .sub-buttons-container {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+      }
+
+      .songpt-button-secondary {
+        background-color: #121212;
+        color: white;
+        border: 1px solid gray;
+        border-radius: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        text-decoration: none;
+      }
+
+      .songpt-button-secondary:hover {
+        border: 1px solid white;
+        transform: scale(1.01);
+      }
+
+      .songpt-button-secondary:active {
+        border: 1px solid gray;
+        color: gray;
+      }
+
+      .songbattle-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+      }
+
+      .songbattle-label {
+        font-size: 0.75rem;
+      }
+
+      .songpt-link {
+        color: #1db954;
+      }
+
+      .songpt-link:hover {
+        color: #1ed760;
+      }
+
+      .imprint-container {
+        font-size: 0.625rem;
+        color: gray;
+      }
+    </style>
+    <script>
+      async function onClick() {
+        // Retrieve input
+        const input = document.getElementsByClassName("songpt-input")[0];
+        const key = document.getElementsByClassName("songpt-input")[1];
+        const button = document.getElementsByClassName("songpt-button")[0];
+        const inputText = input.value?.trim();
+        const keyText = key.value?.trim();
+
+        // Disable button and inputs
+        button.disabled = true;
+        input.disabled = true;
+        key.disabled = true;
+
+        // Send request to API
+        const url = "https://songpt-ai.web.app/api/createplaylist";
+        const data = { input: inputText, openAiApiKey: keyText };
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        };
+
+        // Handle response
+        try {
+          const response = await fetch(url, options);
+          const json = await response.json();
+          if (response.status !== 200) {
+            console.error(json);
+            throw new Error(json.error);
+          }
+          const playlistId = json.playlistId;
+          if (!playlistId) {
+            throw new Error("No playlist ID returned.");
+          }
+          setTimeout(() => {
+            window.open(`https://open.spotify.com/playlist/${playlistId}`, "_blank");
+            input.value = "";
+            button.disabled = false;
+            input.disabled = false;
+            key.disabled = false;
+          }, 1000);
+        } catch (error) {
+          alert("An error occurred: " + error.message);
+          button.disabled = false;
+          input.disabled = false;
+          key.disabled = false;
+        }
+      }
+    </script>
+    <div></div>
+    <div class="main-container">
+      <div class="header-container">
+        <img src="https://songpt-ai.web.app/songpt.webp" alt="songpt" height="160" width="160" />
+        <span class="header">songpt</span>
+        <span>Create Spotify playlists using AI.</span>
+      </div>
+      <div class="input-container">
+        <input class="songpt-input" placeholder="What would you like to listen to?" maxlength="100" />
+        <input class="songpt-input" placeholder="Your OpenAI API key" maxlength="60" type="password" />
+        <button class="songpt-button" onclick="onClick()">Create Playlist</button>
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="sub-buttons-container">
+        <a class="songpt-button-secondary" href="https://github.com/sebastianwilczek/songpt" target="_blank" rel="noopener noreferrer">Open on GitHub</a>
+        <a class="songpt-button-secondary" href="https://www.npmjs.com/package/songpt" target="_blank" rel="noopener noreferrer">Open on npm</a>
+      </div>
+      <div class="songbattle-container">
+        <a href="https://songbattle.io" target="_blank" rel="noopener noreferrer">
+          <img src="https://songbattle.io/banner_small.webp" alt="songbattle.io" height="60"/>
+        </a>
+        <span class="songbattle-label">songpt powers <a class="songpt-link" href="https://songbattle.io" target="_blank" rel="noopener noreferrer">songbattle.io</a></span>
+      </div>
+      <div class="imprint-container">
+        <span>Created by Sebastian Wilczek. All rights reserved.</span>
+      </div>
+    </div>
+  </body>
+</html>
